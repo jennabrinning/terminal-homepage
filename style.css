@@ -1,0 +1,414 @@
+/* ==========================================================================
+   JENNA BRINNING — TERMINAL SITE
+   Brutalist white+black / black+white toggle
+   Font: Space Mono (monospace)
+   ========================================================================== */
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Light theme (default): white bg, black text */
+  --bg: #FFFFFF;
+  --bg-terminal: #FAFAFA;
+  --fg: #09090B;
+  --fg-muted: #3F3F46;
+  --border: #18181B;
+  --accent: #09090B;
+  --prompt-color: #3F3F46;
+  --link-color: #09090B;
+  --link-hover: #3F3F46;
+  --dot-close: #09090B;
+  --dot-minimize: #3F3F46;
+  --dot-maximize: #71717A;
+  --cursor-color: #09090B;
+  --selection-bg: #18181B;
+  --selection-fg: #FAFAFA;
+  --title-bar-bg: #F4F4F5;
+  --title-bar-border: #E4E4E7;
+  --scrollbar-thumb: #A1A1AA;
+  --scrollbar-track: transparent;
+
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Dark theme: black bg, white text */
+:root.dark {
+  --bg: #09090B;
+  --bg-terminal: #0A0A0C;
+  --fg: #FAFAFA;
+  --fg-muted: #A1A1AA;
+  --border: #FAFAFA;
+  --accent: #FAFAFA;
+  --prompt-color: #A1A1AA;
+  --link-color: #FAFAFA;
+  --link-hover: #A1A1AA;
+  --dot-close: #FAFAFA;
+  --dot-minimize: #A1A1AA;
+  --dot-maximize: #71717A;
+  --cursor-color: #FAFAFA;
+  --selection-bg: #FAFAFA;
+  --selection-fg: #09090B;
+  --title-bar-bg: #18181B;
+  --title-bar-border: #27272A;
+  --scrollbar-thumb: #3F3F46;
+  --scrollbar-track: transparent;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+/* ---------- Accessibility ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Layout ---------- */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: background-color 0.3s ease;
+}
+
+#terminal-wrapper {
+  width: 100%;
+  max-width: 820px;
+  height: 90vh;
+  max-height: 700px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Terminal Window ---------- */
+#terminal-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 2px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+/* ---------- Title Bar ---------- */
+#title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: var(--title-bar-bg);
+  border-bottom: 2px solid var(--border);
+  user-select: none;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#traffic-lights {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.dot-close {
+  background-color: #FF5F57;
+  border-color: #E0443E;
+}
+
+.dot-minimize {
+  background-color: #FEBC2E;
+  border-color: #DEA123;
+}
+
+.dot-maximize {
+  background-color: #28C840;
+  border-color: #1AAB29;
+}
+
+#title-bar-text {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  transition: color 0.3s ease;
+}
+
+/* ---------- Terminal Body ---------- */
+#terminal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: var(--bg-terminal);
+  cursor: text;
+  transition: background-color 0.3s ease;
+}
+
+/* Scrollbar */
+#terminal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#terminal-body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+#terminal-body::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}
+
+/* ---------- Output ---------- */
+#output {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Output line types */
+.output-line {
+  margin-bottom: 2px;
+  min-height: 1.6em;
+}
+
+.output-line.welcome {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.output-line.system {
+  color: var(--fg-muted);
+}
+
+.output-line.command-echo {
+  color: var(--fg);
+}
+
+.output-line.command-echo .echo-prompt {
+  color: var(--prompt-color);
+}
+
+.output-line.command-echo .echo-cmd {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.output-line.error {
+  color: var(--fg);
+  font-style: italic;
+}
+
+.output-line.response {
+  color: var(--fg);
+}
+
+.output-line.heading {
+  color: var(--fg);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.output-line.spacer {
+  height: 12px;
+}
+
+.output-line.divider {
+  color: var(--fg-muted);
+  user-select: none;
+}
+
+/* Links in output */
+.output-line a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.output-line a:hover {
+  color: var(--link-hover);
+  text-decoration-thickness: 2px;
+}
+
+.output-line a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* ---------- Input Line ---------- */
+#input-line {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+#prompt {
+  color: var(--prompt-color);
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+#command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+  min-height: 44px;
+  caret-color: var(--cursor-color);
+  transition: color 0.3s ease, caret-color 0.3s ease;
+}
+
+#command-input::placeholder {
+  color: transparent;
+}
+
+/* Blinking block cursor effect via caret */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ---------- Pixel Banner ---------- */
+.ascii-art {
+  user-select: none;
+  margin-bottom: 8px;
+}
+
+.pixel-banner {
+  --pixel-size: 8px;
+  display: inline-grid;
+  gap: 2px;
+}
+
+.pixel {
+  width: var(--pixel-size);
+  height: var(--pixel-size);
+  background-color: transparent;
+}
+
+.pixel.on {
+  background-color: var(--fg);
+  transition: background-color 0.3s ease;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  #terminal-wrapper {
+    max-width: 100%;
+    height: 100vh;
+    max-height: none;
+  }
+
+  #terminal-window {
+    border: none;
+    border-top: 2px solid var(--border);
+  }
+
+  #terminal-body {
+    padding: 16px;
+  }
+
+  :root {
+    font-size: 13px;
+  }
+
+  .pixel-banner {
+    --pixel-size: 6px;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    font-size: 13px;
+  }
+
+  #title-bar-text {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .pixel-banner {
+    --pixel-size: 5px;
+  }
+
+  #command-input {
+    font-size: 16px;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  #terminal-window {
+    border: 1px solid black;
+  }
+
+  #input-line {
+    display: none;
+  }
+}

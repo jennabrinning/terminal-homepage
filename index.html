@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenna Brinning — Terminal</title>
+    <meta name="description"
+        content="Jenna Brinning's personal website. A brutalist terminal-style portfolio featuring bio, projects, and contact info.">
+    <meta name="author" content="Jenna Brinning">
+    <meta property="og:title" content="Jenna Brinning — Terminal">
+    <meta property="og:description" content="A brutalist, terminal-style personal site. Type 'help' to explore.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jennabrinning.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main id="terminal-wrapper">
+        <div id="terminal-window">
+            <!-- Title bar -->
+            <header id="title-bar">
+                <div id="traffic-lights">
+                    <span class="dot dot-close" aria-hidden="true"></span>
+                    <span class="dot dot-minimize" aria-hidden="true"></span>
+                    <span class="dot dot-maximize" aria-hidden="true"></span>
+                </div>
+                <span id="title-bar-text">$Jenna Terminal</span>
+            </header>
+
+            <!-- Terminal output area -->
+            <div id="terminal-body" role="log" aria-live="polite" aria-label="Terminal output">
+                <div id="output"></div>
+
+                <!-- Input line -->
+                <div id="input-line">
+                    <label for="command-input" class="sr-only">Terminal command input</label>
+                    <span id="prompt" aria-hidden="true">guest@jenna:~$&nbsp;</span>
+                    <input type="text" id="command-input" autocomplete="off" autocapitalize="off" autocorrect="off"
+                        spellcheck="false" autofocus aria-label="Type a command">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="terminal.js"></script>
+</body>
+
+</html>
