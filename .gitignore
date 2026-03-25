@@ -1,0 +1,17 @@
+# Agent/AI tooling
+.agent/
+.agents/
+_agent/
+_agents/
+.gemini/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
